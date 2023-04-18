@@ -4,10 +4,12 @@
 using namespace std;
 
 void RegistrarMateria(char* direccion_archivo);
+void RegistrarHorario();
 
 int main()
 {
-    RegistrarMateria("C:\\Users\\computador\\Desktop\\Materias_registradas.txt");
+    //RegistrarMateria("C:\\Users\\computador\\Desktop\\Materias_registradas.txt");
+    RegistrarHorario();
     return 0;
 }
 
@@ -46,6 +48,43 @@ void RegistrarMateria(char* direccion_archivo){
                 }
             }
             archivo_salida << endl;
+            archivo_salida.close();
+        }
+        else {
+            cout << "Error al abrir el archivo." << endl;
+        }
+}
+
+void RegistrarHorario(){
+    char codigo[30];
+    int NHorarios = 0;
+    cout << "Ingrese el codigo de la materia: ";
+    cin >> codigo;
+    cout << endl << "Ingrese el # de horarios que tendra la materia: ";
+    cin >> NHorarios;
+    cout << endl;
+    char** horario = new char* [NHorarios+2];
+    for (int i = 0; i < NHorarios+2; i++){
+        horario[i] = new char [30];
+    }
+    horario[0] = codigo;
+    horario[1][0] = NHorarios + 48;
+    for (int i = 2; i < NHorarios+2; i++){
+        cout << "Ingrese el horario " << i-1 << ": ";
+        cin >> horario[i];
+    }
+
+    ofstream archivo_salida("C:\\Users\\computador\\Desktop\\Horarios_registrados.txt", ios::app);
+
+        if (archivo_salida.is_open()){
+            for(int i = 0; i < NHorarios+2; i++){
+                if(i == 1){
+                    archivo_salida << horario[i][0] << endl;
+                }
+                else{
+                    archivo_salida << horario[i] << endl;
+                }
+            }
             archivo_salida.close();
         }
         else {
