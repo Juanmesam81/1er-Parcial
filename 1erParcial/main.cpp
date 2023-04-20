@@ -58,7 +58,7 @@ int main()
             }
         }
 
-        // Recorrer el puntero triple y asignar "Libre" a cada posición
+        // Recorrer el puntero triple y asignar "**********" a cada posición
         for(int i = 0; i < 7; i++){
             for(int j = 0; j < 24; j++){
                     horario[i][j] = "**********";
@@ -80,21 +80,23 @@ int main()
             cout << endl << endl;
             switch (control){
                 case 0:
-                    cout << "Has elegido finalizar el programa" << endl << endl << "Cursos:" << endl; ;
+                    cout << "Has elegido finalizar el programa" << endl << endl << "Cursos:" << endl; ;                    
+                    //Liberar la memoria utilizada por los cursos
                     for(int i = 0; i < n; i++){
-                        cout << "Curso " << i+1 << ": ";
-                            for(int j = 0; j < 5; j++){
-                                cout << cursosMatriculados[i][j] << " - ";
-                            }
-                        cout << endl;
-                    }
-                    cout << endl << endl << "Horarios: " << endl << endl;
-                    for(int i = 0; i < 7; i++){
-                        cout << "Dia " << i+1 << ":" << endl;
-                        for(int j = 0; j < 24; j++){
-                            cout << horario[i][j];
+                        for(int j = 0; j < 5; j++){
+                            delete[] cursosMatriculados[i][j];
                         }
+                        delete[] cursosMatriculados[i];
                     }
+                    delete[] cursosMatriculados;
+                    //Liberar la memoria utilizada por el horario
+                    for(int i = 0; i < 7; i++){
+                        for(int j = 0; j < 24; j++){
+                            delete[] horario[i][j];
+                        }
+                            delete[] horario[i];
+                    }
+                    delete[] horario;
                     exit(0);
                     break;
                 case 1:
@@ -114,24 +116,9 @@ int main()
                             tamano++;
                         }
                     }
-                    Matricular(cursosMatriculados, codigo, n);
-                    for(int i = 0; i < n; i++){
-                        cout << "Curso " << i+1 << ": ";
-                            for(int j = 0; j < 5; j++){
-                                cout << cursosMatriculados[i][j] << " - ";
-                            }
-                        cout << endl;
-                    }
+                    Matricular(cursosMatriculados, codigo, n);                    
                     MatricularHorario(horario, cursosMatriculados, codigo, n);
-                    aumentarMatriz(cursosMatriculados, pAn);
-                    cout << endl;
-                    for(int i = 0; i < n; i++){
-                        cout << "Curso " << i+1 << ": ";
-                            for(int j = 0; j < 5; j++){
-                                cout << cursosMatriculados[i][j] << " - ";
-                            }
-                        cout << endl;
-                    }
+                    aumentarMatriz(cursosMatriculados, pAn);                                       
                     delete[] codigo;
                     break;
                 case 2:
@@ -338,6 +325,7 @@ void MatricularHorario(char*** &horario, char*** &cursos, char* codigo, int n){
     }
     else{
         cout << "El archivo de los horarios no pudo ser abierto." << endl;
+        exit(0);
     }
     //Pedir horario elegido al usuario
     cout << "Ingrese el horario que desea escribiendo en el siguiente formato, 1ro la inicial del dia, luego las horas. Si el horario tiene varios dias escriba siguiendo el formato que se le pedira." << endl << endl;
@@ -355,10 +343,10 @@ void MatricularHorario(char*** &horario, char*** &cursos, char* codigo, int n){
         if(dia == 'S' || dia == 's') dia = '5';
         cout << endl << "Ingrese la 1ra hora del dia en formato de 24 hrs: ";
         cin >> hora1;
-        cout << endl << "Ingrese la 2ra hora del dia: ";
+        cout << endl << "Ingrese la 2da hora del dia: ";
         cin >> hora2;
-        horario[dia-48][hora1] = cursos[n-1][1];
-        horario[dia-48][hora2] = cursos[n-1][1];
+        horario[static_cast<int>(dia) - 48][hora1] = cursos[n-1][1];
+        horario[static_cast<int>(dia) - 48][hora2] = cursos[n-1][1];
     }
     if(cursos[n-1][2][0] == '4'){
         char dia1;
@@ -383,7 +371,7 @@ void MatricularHorario(char*** &horario, char*** &cursos, char* codigo, int n){
         if(dia2 == 'S' || dia2 == 's') dia2 = '5';
         cout << endl << "Ingrese la 1ra hora del dia en formato de 24 hrs: ";
         cin >> hora1;
-        cout << endl << "Ingrese la 2ra hora del dia: ";
+        cout << endl << "Ingrese la 2da hora del dia: ";
         cin >> hora2;
         cout << endl << endl;
         horario[dia1-48][hora1] = cursos[n-1][1];
@@ -418,7 +406,7 @@ void MatricularHorario(char*** &horario, char*** &cursos, char* codigo, int n){
         if(dia2 == 'S' || dia2 == 's') dia2 = '5';
         cout << endl << "Ingrese la 1ra hora del dia en formato de 24 hrs: ";
         cin >> hora1;
-        cout << endl << "Ingrese la 2ra hora del dia: ";
+        cout << endl << "Ingrese la 2da hora del dia: ";
         cin >> hora2;
         cout << endl << "Ingrese la inicial del 3er dia en mayuscula: ";
         cin >> dia3;
@@ -430,7 +418,7 @@ void MatricularHorario(char*** &horario, char*** &cursos, char* codigo, int n){
         if(dia3 == 'S' || dia3 == 's') dia3 = '5';
         cout << endl << "Ingrese la 1ra hora del 3er dia en formato de 24 hrs: ";
         cin >> hora3;
-        cout << endl << "Ingrese la 2ra hora del 3er dia: ";
+        cout << endl << "Ingrese la 2da hora del 3er dia: ";
         cin >> hora4;
         cout << endl << "Ingrese la 3ra hora del 3er dia: ";
         cin >> hora5;
@@ -443,9 +431,6 @@ void MatricularHorario(char*** &horario, char*** &cursos, char* codigo, int n){
         horario[dia3-48][hora4] = cursos[n-1][1];
         horario[dia3-48][hora5] = cursos[n-1][1];
     }
-
-
-
 }
 
 
@@ -485,10 +470,10 @@ void verHorario(char*** horario) {
 }
 
 void aumentarMatriz(char*** &cursos, int* &pAn){
-    // Crear un puntero temporal para almacenar los datos originales
+    //Crear un puntero temporal para almacenar los datos originales
         char*** ptrTemporal = new char**[*pAn];
 
-        // Copiar los datos del puntero triple original al temporal
+        //Copiar los datos del puntero triple original al temporal
         for(int i = 0; i < *pAn; i++){
             ptrTemporal[i] = new char*[5];
             for(int j = 0; j < 5; j++){
@@ -499,7 +484,7 @@ void aumentarMatriz(char*** &cursos, int* &pAn){
             }
         }
 
-        // Liberar la memoria del puntero triple original
+        //Liberar la memoria del puntero triple original
         for(int i = 0; i < *pAn; i++){
             for(int j = 0; j < 5; j++){
                 delete[] cursos[i][j];
@@ -508,9 +493,9 @@ void aumentarMatriz(char*** &cursos, int* &pAn){
         }
         delete[] cursos;
 
-        // Aumentar n
+        //Aumentar n
         *pAn += 1;
-        // Crear un nuevo puntero triple con el tamaño actualizado
+        //Crear un nuevo puntero triple con el tamaño actualizado
         cursos = new char**[*pAn];
         for(int i = 0; i < *pAn; i++){
             cursos[i] = new char*[5];
@@ -518,7 +503,7 @@ void aumentarMatriz(char*** &cursos, int* &pAn){
                 cursos[i][j] = new char[30];
             }
         }
-        // Copiar los datos del puntero temporal al nuevo puntero triple
+        //Copiar los datos del puntero temporal al nuevo puntero triple
         for(int i = 0; i < *pAn - 1; i++){;
             for(int j = 0; j < 5; j++){
                 for(int k = 0; k < 30; k++){
